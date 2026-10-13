@@ -31,21 +31,130 @@ SECTION 3 — VERIFICATION (STEP_07)
 3.3 Any mismatch sends the payment to a manual review queue. The payment is not captured. This is manual review, not automatic blocking.
 3.4 VPN, proxy and Tor checks from MASTER_PROMPT apply on every payment page.
 
-SECTION 4 — PAYMENT PROVIDERS (STEP_07) — REPLACES THE PREVIOUS SECTION 4
-4.1 Providers in scope, each behind its own adapter in lib/payments/adapters/<provider>.ts:
-    NMI, Stripe, FastSpring, Verifone (2Checkout), PayPro Global, BlueSnap, Braintree, Payoneer, Square, Adyen, Paddle.
-    Out of scope unless the owner confirms: Payarc/PaymentCloud, Rapyd, standalone PayPal.
-4.2 Build order: NMI and Stripe first, fully working end to end. Then the other nine, one adapter per commit.
-4.3 Source of truth: before writing an adapter, read that provider's CURRENT official API documentation on the provider's own website. Record the documentation URL and the date read in the commit message and the completion report. Do not write from memory.
-4.4 If the documentation cannot be reached, mark that adapter "blocked: documentation not reachable" and move on. Never guess endpoints, field names, signatures or status values.
-4.5 NMI Collect.js: read NMI's own Collect.js documentation for the exact script URL, field setup, callback and token flow. Implement exactly as documented. The server charges the returned token. The server-side security key is held only in environment variables. The page is served over HTTPS.
-4.6 Stripe: read Stripe's current documentation for Payment Intents, Elements and webhook signature verification.
-4.7 Each adapter declares its business model in code: "acquirer" or "merchant_of_record". The payment service must never charge the same invoice through two providers. Every payment records which provider processed it.
-4.8 All adapters implement the same interface: charge, capture, void, refund, parse and verify webhook, look up status, health check. An operation the provider does not support returns a typed "not supported" error. It must never be a silent no-op.
-4.9 Money: amounts come from the invoice in USD, stored as numeric(18,4). Each adapter converts to the provider's format explicitly and rejects any amount that does not convert exactly.
-4.10 Sandbox and live are chosen per provider in the admin dashboard (Section 6), never by code change.
-4.11 Section 2 card-data rules apply to every provider's hosted fields.
-4.12 Routing default (owner to confirm): a payment is routed to an enabled provider by a routing-rule table editable by super_admin. If no rule matches, the payment is REFUSED. It is never silently sent to another provider.
+SECTION 4 — PAYMENT PROVIDERS (STEP_07)
+REPLACES SECTION 4 OF ALL EARLIER BLOCKS. Sections 1, 2, 3, 5, 6 and 7 are unchanged.
+
+4.1 Providers in scope from the start. Each has its own adapter file in lib/payments/adapters/<provider>.ts.
+    Official documentation links are listed in 4.2. Every provider is in scope; none is optional.
+
+4.2 PROVIDER LIST, DOCUMENTATION AND SANDBOX LINKS (starting points; verify each on the provider's own site)
+
+    1. Stripe
+       API:      https://stripe.com/docs/api
+       Testing:  https://stripe.com/docs/testing
+
+    2. NMI
+       Collect.js:  https://docs.nmi.com/docs/collectjs
+       API:         https://docs.nmi.com/
+       Sandbox:     https://docs.nmi.com/docs/testing-sandbox
+       Index for agents: https://docs.nmi.com/llms.txt
+
+    3. Adyen
+       API:      https://docs.adyen.com/
+       Testing:  https://docs.adyen.com/development-resources/testing/
+
+    4. Verifone (2Checkout)
+       API:      https://docs.verifone.com/
+       Sandbox:  https://www.verifone.com/development-partner
+
+    5. Braintree (PayPal)
+       API:      https://developer.paypal.com/braintree/docs
+       Sandbox:  https://developer.paypal.com/braintree/help/sandboxHelp
+
+    6. BlueSnap
+       API:      https://developers.bluesnap.com/
+       Index for agents: https://developers.bluesnap.com/llms.txt
+       Test mode: NOT https://developers.bluesnap.com/docs/test-mode (returns 404). Find the correct test-mode page in the index above.
+
+    7. Square
+       API:      https://developer.squareup.com/docs
+       Sandbox:  https://developer.squareup.com/docs/testing/sandbox
+
+    8. Payoneer
+       API:      https://developer.payoneer.com/docs/payoneer-api-reference
+       Portal:   https://developer.payoneer.com/
+
+    9. FastSpring
+       API:      https://developer.fastspring.com/reference/api-overview
+       Sandbox:  not provided. Find it in the FastSpring docs and record it.
+
+    10. Paddle
+        API:      https://developer.paddle.com/
+        Sandbox:  https://developer.paddle.com/sdks/sandbox/
+
+    11. PayPro Global
+        API:      https://developers.payproglobal.com/docs/api/overview/
+        Sandbox:  not provided. Find it in the PayPro Global docs and record it.
+
+    12. PayPal (standalone)
+        API:      https://developer.paypal.com/api/rest/
+        Sandbox:  https://developer.paypal.com/sandbox-testing/overview
+
+    13. Payarc / PaymentCloud
+        Docs:     https://docs.payarc.net/
+        Sandbox:  not provided. Find it in the Payarc docs and record it.
+
+    14. Rapyd
+        Docs:     https://docs.rapyd.net/
+        Sandbox:  not provided. Find it in the Rapyd docs and record it.
+
+    15. Authorize.Net
+        API:           https://developer.authorize.net/api/reference/index.html
+        Sandbox info:  https://developer.authorize.net/hello_world/sandbox.html
+        Testing guide: https://developer.authorize.net/hello_world/testing_guide.html
+
+    16. Custom
+        Generic adapter for an owner-defined HTTPS gateway. No provider-specific behaviour is hardcoded.
+
+4.3 If a listed link returns 404 or an error, search that provider's documentation index (llms.txt where present) for the correct page. Record the corrected URL. Do not guess.
+4.4 Build order: Stripe and NMI first, end to end. Then the remaining providers in the numbered order in 4.2. Each provider is its own sub-batch with its own gate run and its own commit.
+4.5 Source of truth: before writing any adapter, read that provider's CURRENT official documentation. Record the URL and the date read in the commit message and in STEP_07_COMPLETED.md. Do not write from memory.
+4.6 If the documentation cannot be reached or read, mark that adapter "blocked: documentation not reachable", with the URLs attempted, and continue with the next adapter. Never guess endpoints, field names, signatures, status values or error codes.
+4.7 NMI — TWO FRONTEND MODES, BOTH KEPT. Each mode is selectable by super_admin.
+
+    MODE A — "collectjs"  (default)
+    - Documentation: https://docs.nmi.com/docs/collectjs
+    - Use the script URL and field setup exactly as in that page.
+    - Collect.js tokens are single-use and expire 24 hours after creation.
+      A token is never submitted twice. An expired token is rejected with a typed error.
+
+    MODE B — "payment_component"
+    - Documentation: https://docs.nmi.com/docs/payment-component
+    - Packages: @nmipayments/nmi-pay (vanilla JS) and @nmipayments/nmi-pay-react (React).
+      Use the package matching the stack of the checkout page.
+    - Use the onChange handler when 3D Secure is needed, as the documentation states.
+    - The public tokenization key is frontend-safe. Obtain it as the documentation describes.
+    - Adding these packages is an integrator request (package.json is integrator-owned).
+      Record the request in integrator/requests/step-07.json.
+
+    BOTH MODES:
+    - The server charges the returned payment token through ONE shared server-side NMI charge module,
+      calling the NMI REST API sale endpoint as documented at
+      https://docs.nmi.com/reference/create-sale-v5.
+    - The private security key is held only in environment variables. It never appears in client code,
+      the repository, logs or chat.
+    - The page is served over HTTPS.
+    - Section 2 card-data rules apply to both modes. The server never receives a card number or CVV.
+
+4.8 NMI MODE SELECTION RULES
+4.8.1 The active mode is stored per NMI provider in the provider registry (Section 4.16).
+4.8.2 Only one mode is active per NMI provider at a time.
+4.8.3 Switching mode requires a successful "Test connection" in the NEW mode first (Section 6.2).
+4.8.4 Every mode change is written to the audit log with actor, timestamp, old mode and new mode.
+4.8.5 The mode selector appears only on the Payment Providers page of super_admin (Section 6.1).
+4.8.6 Each mode's completion entry in STEP_07_COMPLETED.md lists: documentation URL, date read,
+      endpoints used, and sandbox result with real output. Status is "implemented, not verified live"
+      if no sandbox credentials were available.
+4.9 Stripe: follow Stripe's current documentation for Payment Intents, Elements and webhook signature verification.
+4.10 All other providers: follow each provider's own documented hosted-field, redirect, token or API flow. For every provider, the application server must never receive a card number or CVV (Section 2.2).
+4.11 Each adapter declares its business model in code: "acquirer" or "merchant_of_record". The payment service must never charge the same invoice through two providers. Every payment records which provider processed it.
+4.12 All adapters implement one interface: charge, capture, void, refund, verify and parse webhook, look up status, health check. An operation the provider does not support returns a typed "not supported" error. It is never a silent no-op.
+4.13 Webhooks are verified with the method that provider documents. Unverified webhooks are rejected and logged. Processing is idempotent.
+4.14 Money: amounts come from the invoice in USD, stored as numeric(18,4). Each adapter converts to the provider's format explicitly and rejects any amount that does not convert exactly.
+4.15 Routing (owner confirmed): a payment is routed to an enabled provider by a routing-rule table editable by super_admin. If no rule matches, the payment is REFUSED. It is never silently sent to another provider.
+4.16 A single provider registry file lists every adapter. The super admin dashboard (Section 6) reads this registry. Adding a provider later requires only its adapter file and one registry entry.
+4.17 Sandbox and live modes are chosen per provider in the dashboard (Section 6), never by code change.
+4.18 If the step cannot finish in one chat, use RESUME MODE. Do not drop any provider. Unfinished providers are listed in STEP_07_COMPLETED.md as "pending" with the reason, never as "done".
 
 SECTION 5 — FORBIDDEN IN THESE STEPS
 - Any keystroke, mouse or typing capture on card fields.
