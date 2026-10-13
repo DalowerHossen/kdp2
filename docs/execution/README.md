@@ -110,8 +110,9 @@ These are the rules that make parallel work safe. They are enforced by
 `integration` and the `foundation-v1` tag already exist on `origin`:
 
 ```
-origin/integration   ece14f0   all planning docs and the step briefs
-refs/tags/foundation-v1        annotated tag on ece14f0
+refs/tags/foundation-v1   annotated tag on ece14f0 - the fixed Wave 1 base
+origin/integration        all planning docs and the step briefs; its sha advances
+                          as each step merges, so never hardcode it
 ```
 
 Each step runs on its own branch. In a hosted agent environment the branch is assigned for
