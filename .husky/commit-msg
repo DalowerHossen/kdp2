@@ -1,0 +1,11 @@
+# path: .husky/commit-msg
+set -eu
+message_file="$1"
+if LC_ALL=C grep -q '[^[:print:][:space:]]' "$message_file"; then
+  printf '%s\n' 'Commit messages must contain ASCII text only.' >&2
+  exit 1
+fi
+if ! grep -Eq '^(feat|fix|docs|style|refactor|perf|test|chore)(\([a-z0-9._-]+\))?: .+' "$message_file"; then
+  printf '%s\n' 'Commit message must follow the conventional commit format.' >&2
+  exit 1
+fi

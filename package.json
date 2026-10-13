@@ -1,0 +1,71 @@
+{
+  "name": "kd-solution-it",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Enterprise multi-tenant business management platform",
+  "packageManager": "npm@10.9.8",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint --ext .js,.jsx,.mjs,.cjs,.ts,.tsx --max-warnings=0 .",
+    "format:check": "prettier --check .",
+    "check-english-only": "bash scripts/check-english-only.sh",
+    "check-money-types": "bash scripts/check-money-types.sh",
+    "check-path-comment": "bash scripts/check-path-comment.sh",
+    "check-forbidden-tokens": "bash scripts/check-forbidden-tokens.sh",
+    "check-no-test-files": "bash scripts/check-no-test-files.sh",
+    "check-forbidden-brands": "bash scripts/check-forbidden-brands.sh",
+    "check-migration-lint": "bash scripts/check-migration-lint.sh",
+    "check-nav-integrity": "bash scripts/check-nav-integrity.sh",
+    "check-boundaries": "bash scripts/check-step-boundaries.sh",
+    "check-feature-coverage": "bash scripts/check-feature-coverage.sh",
+    "build-feature-manifest": "node scripts/build-feature-manifest.mjs",
+    "migrate": "node scripts/migrate.mjs",
+    "migrate:down": "node scripts/migrate-down.mjs",
+    "verify-db": "node scripts/verify-db.mjs",
+    "verify-rls": "node scripts/verify-rls.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run check-english-only && npm run check-money-types && npm run check-path-comment && npm run check-forbidden-tokens && npm run check-no-test-files && npm run check-forbidden-brands && npm run check-migration-lint && npm run check-nav-integrity && npm run check-boundaries -- --step ${STEP_NUMBER:-00} && npm run check-feature-coverage && npm run verify-db && npm run verify-rls"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "5.9.1",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.117.3",
+    "decimal.js": "10.6.0",
+    "isomorphic-dompurify": "4.5.0",
+    "lucide-react": "1.56.0",
+    "next": "15.5.27",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-hook-form": "7.90.0",
+    "server-only": "0.0.1",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.9",
+    "@types/node": "22.20.5",
+    "@types/react": "18.3.31",
+    "@types/react-dom": "18.3.7",
+    "@typescript-eslint/eslint-plugin": "8.71.2",
+    "@typescript-eslint/parser": "8.71.2",
+    "autoprefixer": "10.6.1",
+    "eslint": "8.57.1",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "postcss": "8.5.30",
+    "prettier": "3.9.10",
+    "tailwindcss": "4.3.3",
+    "@tailwindcss/postcss": "4.3.3",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "postcss": "8.5.30"
+  }
+}

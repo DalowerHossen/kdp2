@@ -1,0 +1,3 @@
+# path: .prettierignore
+docs/feature-manifest.json
+scripts/feature-glossary.json
