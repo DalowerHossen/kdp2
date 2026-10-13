@@ -21,33 +21,23 @@
 
 ---
 
-## শুরু করার আগে (অবস্থা: প্রস্তুত)
+## শুরু করার আগে (অবস্থা: সম্পূর্ণ প্রস্তুত)
 
-`integration` ব্রাঞ্চ GitHub-এ **তৈরি হয়ে গেছে** — `origin/integration`,
-শা `6ee7cbf` (main-এর সমান)। আর কিছু করতে হবে না।
-প্রতিটি স্টেপের PR যাবে `integration`-এ, `main`-এ নয়।
+সব সেটআপ হয়ে গেছে। GitHub-এ এখন আছে:
 
-শুধু একটি কাজ বাকি: পরিকল্পনার ফাইলগুলো (IMPLEMENTATION_PLAN.md,
-SPEC_CONFLICTS.md, docs/execution/**, CHAT_PROMPTS.md) `integration`-এ
-পৌঁছাতে হবে, নাহলে নতুন চ্যাটগুলো সেগুলো পড়তে পাবে না। এর জন্য একটি PR খোলা
-আছে:
+| রেফ | শা | কী আছে |
+| --- | --- | --- |
+| `origin/integration` | `ece14f0` | সব প্ল্যানিং ডকুমেন্ট + ১৬টি স্টেপ ব্রিফ (২৬টি ফাইল) |
+| `refs/tags/foundation-v1` | `ece14f0` | অ্যানোটেটেড ট্যাগ, Wave 1 এর ভিত্তি |
+| `origin/main` | `6ee7cbf` | এখনো শুধু মূল ৩টি ফাইল |
 
-```
-gh pr list --repo DalowerHossen/kdp2 --base integration
-gh pr view 1 --repo DalowerHossen/kdp2
-```
+পরিকল্পনার ফাইলগুলো `integration`-এ পৌঁছে গেছে (PR #1 মার্জ হয়েছে), তাই নতুন
+চ্যাটগুলো `docs/execution/**` পড়তে পাবে। প্রতিটি স্টেপের PR যাবে `integration`-এ,
+`main`-এ নয়।
 
-PR-টি মার্জ করুন (অথবা Arena-তে বলুন "PR মার্জ করো"), তারপর চ্যাট ১ শুরু করুন।
+**এখন সরাসরি চ্যাট ১ শুরু করুন।** আর কোনো সেটআপ লাগবে না।
 
-STEP_00 মার্জ হওয়ার পর ট্যাগ দিন:
-
-```
-git fetch origin
-git tag foundation-v1 origin/integration
-git push origin foundation-v1
-```
-
-STEP_05 মার্জ হওয়ার পর আবার ট্যাগ দিন:
+পরে, STEP_05 মার্জ হওয়ার পর Wave 2-এর ভিত্তি তৈরি করতে ট্যাগ দিন:
 
 ```
 git fetch origin

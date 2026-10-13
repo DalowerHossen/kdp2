@@ -107,14 +107,25 @@ These are the rules that make parallel work safe. They are enforced by
 
 ### 4.1 One step, one branch, one owner
 
-Each step runs on its own branch, cut from the foundation tag:
+`integration` and the `foundation-v1` tag already exist on `origin`:
 
 ```
-git fetch origin
+origin/integration   ece14f0   all planning docs and the step briefs
+refs/tags/foundation-v1        annotated tag on ece14f0
+```
+
+Each step runs on its own branch. In a hosted agent environment the branch is assigned for
+you (for example `arena/<id>-kdp2`) and you cannot rename it, so work on the branch you
+were given. On a plain local clone, cut the branch yourself:
+
+```
+git fetch origin --tags
 git checkout -b kd/step-NN-slug foundation-v1
 ```
 
+Either way the base content must be `foundation-v1` (Wave 1) or `foundation-v2` (Wave 2).
 Never work on `main`. Never work on another step's branch. Never merge your own branch.
+Every step PR targets `integration`, never `main`.
 
 ### 4.2 Exclusive file ownership
 
