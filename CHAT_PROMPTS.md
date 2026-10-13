@@ -21,17 +21,24 @@
 
 ---
 
-## শুরু করার আগে একবার যা করতে হবে (একবারই)
+## শুরু করার আগে (অবস্থা: প্রস্তুত)
 
-GitHub-এ `main` থেকে `integration` নামে একটি ব্রাঞ্চ তৈরি করুন:
+`integration` ব্রাঞ্চ GitHub-এ **তৈরি হয়ে গেছে** — `origin/integration`,
+শা `6ee7cbf` (main-এর সমান)। আর কিছু করতে হবে না।
+প্রতিটি স্টেপের PR যাবে `integration`-এ, `main`-এ নয়।
+
+শুধু একটি কাজ বাকি: পরিকল্পনার ফাইলগুলো (IMPLEMENTATION_PLAN.md,
+SPEC_CONFLICTS.md, docs/execution/**, CHAT_PROMPTS.md) `integration`-এ
+পৌঁছাতে হবে, নাহলে নতুন চ্যাটগুলো সেগুলো পড়তে পাবে না। এর জন্য একটি PR খোলা
+আছে:
 
 ```
-git fetch origin
-git checkout -b integration origin/main
-git push -u origin integration
+gh pr list --repo DalowerHossen/kdp2 --base integration
+gh pr view 1 --repo DalowerHossen/kdp2
 ```
 
-এরপর প্রতিটি স্টেপের PR যাবে `integration`-এ, `main`-এ নয়।
+PR-টি মার্জ করুন (অথবা Arena-তে বলুন "PR মার্জ করো"), তারপর চ্যাট ১ শুরু করুন।
+
 STEP_00 মার্জ হওয়ার পর ট্যাগ দিন:
 
 ```
