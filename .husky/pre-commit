@@ -1,0 +1,3 @@
+#!/bin/sh
+# Pre-commit gate: fast guard scripts only. The full verify runs in CI.
+npm run verify:quick

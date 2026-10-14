@@ -30,8 +30,16 @@ create index idx_<table>_company_id  on <table> (company_id);
 create index idx_<table>_created_at  on <table> (created_at);
 alter table <table> enable row level security;
 alter table <table> force row level security;
-create policy deny_all_<table> on <table> as restrictive for all to public using (false);
--- then explicit permissive policies for the roles that need access
+-- default-deny catch-all: PERMISSIVE with qual false grants nothing to
+-- anyone, and with RLS's default-deny when no other permissive policy
+-- matches, the table stays sealed. An earlier draft said `as restrictive`;
+-- that is wrong for this sample: a restrictive false policy denies every
+-- row even when another policy explicitly allows it. The named policy is
+-- also the stable anchor the verify gates assert on (deny_all_<table>,
+-- qual false). A step then adds its own explicit permissive policies for
+-- the roles that need access.
+create policy deny_all_<table> on <table> as permissive for all to public
+  using (false) with check (false);
 create trigger trg_<table>_audit after insert or update or delete on <table>
   for each row execute function audit_trigger();
 create trigger trg_<table>_updated before update on <table>

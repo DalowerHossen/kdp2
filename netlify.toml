@@ -1,0 +1,25 @@
+# Netlify deployment for KD SOLUTION IT.
+# Scheduled cron functions are registered by STEP_14 in netlify/functions/.
+[build]
+  command = "npm run tokens && npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# Webhook routes need the raw, unmodified request body for signature verification.
+# The Next.js runtime preserves raw bodies for route handlers automatically.
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

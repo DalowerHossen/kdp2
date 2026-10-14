@@ -1,0 +1,50 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "ecmaFeatures": { "jsx": true },
+    "project": false
+  },
+  "extends": ["next/core-web-vitals"],
+  "plugins": ["@typescript-eslint"],
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    "out/",
+    "dist/",
+    "coverage/",
+    "docs/",
+    "migrations/",
+    ".husky/",
+    "next-env.d.ts"
+  ],
+  "rules": {
+    "no-console": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Literal[value=/[^\\u0000-\\u007F]/]",
+        "message": "ASCII only in source. Rule 1: move the text to lib/i18n/strings/en.ts in ASCII form."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["scripts/**/*.mjs", "scripts/**/*.js", "*.config.mjs", "*.config.js"],
+      "parser": "espree",
+      "parserOptions": { "ecmaVersion": 2022, "sourceType": "module" },
+      "rules": {
+        "no-console": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "no-restricted-syntax": "off"
+      }
+    },
+    {
+      "files": ["tailwind.config.ts", "postcss.config.ts", "components.json"],
+      "rules": { "no-restricted-syntax": "off" }
+    }
+  ]
+}

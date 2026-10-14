@@ -1,0 +1,26 @@
+# GitLab mirror of .github/workflows/kd-verify.yml (same gates, always).
+image: node:22-bookworm
+
+cache:
+  key: kd-npm
+  paths:
+    - node_modules/
+
+stages:
+  - verify
+
+verify:
+  stage: verify
+  script:
+    - npm ci
+    - npx tsc --noEmit
+    - npm run lint
+    - bash scripts/check-english-only.sh
+    - bash scripts/check-money-types.sh
+    - bash scripts/check-forbidden-tokens.sh
+    - bash scripts/check-no-test-files.sh
+    - bash scripts/check-forbidden-brands.sh
+    - bash scripts/check-migration-lint.sh
+    - npm run verify-db
+    - npm run verify-rls
+    - npm run manifest

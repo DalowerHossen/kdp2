@@ -1,0 +1,25 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run verify-db
+      - run: npm run build
+      # Netlify is connected via its GitHub integration for the production site.
+      # This job is the pre-deploy gate: it refuses a broken main branch before
+      # Netlify publishes it. Additional providers deploy from their own triggers.

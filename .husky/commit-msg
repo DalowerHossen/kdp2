@@ -1,0 +1,11 @@
+#!/bin/sh
+# Conventional, atomic commits: type(scope): subject  OR  type: subject
+# Types: feat fix docs refactor perf chore build ci revert style
+msg_file="$1"
+pattern='^(feat|fix|docs|refactor|perf|chore|build|ci|revert|style)(\([a-z0-9._/-]+\))?!?: .+'
+if ! grep -qE "$pattern" "$msg_file"; then
+  echo "commit-msg: subject must match 'type(scope): description'." >&2
+  echo "  types: feat fix docs refactor perf chore build ci revert style" >&2
+  echo "  example: feat(step-00): add migration runner" >&2
+  exit 1
+fi

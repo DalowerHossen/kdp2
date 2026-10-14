@@ -1,0 +1,22 @@
+# Repository ownership. Owners review changes to the paths listed.
+# Step ownership is enforced mechanically by scripts/check-step-boundaries.sh
+# against docs/execution/ownership.json; this file is the human review layer.
+
+# Integrator-owned shared surface
+/package.json                      @DalowerHossen
+/tsconfig.json                     @DalowerHossen
+/.github/                          @DalowerHossen
+/lib/contracts/                    @DalowerHossen
+/lib/logger/                       @DalowerHossen
+/lib/errors/                       @DalowerHossen
+/lib/money/                        @DalowerHossen
+/lib/http/                         @DalowerHossen
+/lib/validation/                   @DalowerHossen
+/lib/db/                           @DalowerHossen
+/lib/supabase/                     @DalowerHossen
+/scripts/                          @DalowerHossen
+/migrations/0000_*.sql             @DalowerHossen
+/docs/                             @DalowerHossen
+
+# Everything else defaults to the integrator until per-step ownership splits merge.
+*                                  @DalowerHossen

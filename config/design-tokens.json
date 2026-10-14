@@ -1,0 +1,50 @@
+{
+  "$comment": "Source of truth for design tokens. app/globals.css and tailwind theme values are generated from this file by scripts/build-design-tokens.mjs. Edit this file, then run npm run tokens.",
+  "color": {
+    "background": { "light": "0 0% 100%", "dark": "222 47% 11%" },
+    "foreground": { "light": "222 47% 11%", "dark": "210 40% 98%" },
+    "card": { "light": "0 0% 100%", "dark": "222 47% 13%" },
+    "cardForeground": { "light": "222 47% 11%", "dark": "210 40% 98%" },
+    "popover": { "light": "0 0% 100%", "dark": "222 47% 11%" },
+    "popoverForeground": { "light": "222 47% 11%", "dark": "210 40% 98%" },
+    "primary": { "light": "221 83% 53%", "dark": "217 91% 60%" },
+    "primaryForeground": { "light": "210 40% 98%", "dark": "222 47% 11%" },
+    "secondary": { "light": "210 40% 96%", "dark": "217 33% 17%" },
+    "secondaryForeground": { "light": "222 47% 11%", "dark": "210 40% 98%" },
+    "muted": { "light": "210 40% 96%", "dark": "217 33% 17%" },
+    "mutedForeground": { "light": "215 16% 47%", "dark": "215 20% 65%" },
+    "accent": { "light": "210 40% 96%", "dark": "217 33% 17%" },
+    "accentForeground": { "light": "222 47% 11%", "dark": "210 40% 98%" },
+    "destructive": { "light": "0 84% 60%", "dark": "0 63% 31%" },
+    "destructiveForeground": { "light": "210 40% 98%", "dark": "210 40% 98%" },
+    "success": { "light": "142 71% 45%", "dark": "142 71% 45%" },
+    "successForeground": { "light": "0 0% 100%", "dark": "0 0% 100%" },
+    "warning": { "light": "38 92% 50%", "dark": "38 92% 50%" },
+    "warningForeground": { "light": "0 0% 100%", "dark": "0 0% 100%" },
+    "border": { "light": "214 32% 91%", "dark": "217 33% 17%" },
+    "input": { "light": "214 32% 91%", "dark": "217 33% 17%" },
+    "ring": { "light": "221 83% 53%", "dark": "224 76% 48%" },
+    "chart1": { "light": "221 83% 53%", "dark": "217 91% 60%" },
+    "chart2": { "light": "142 71% 45%", "dark": "142 71% 45%" },
+    "chart3": { "light": "262 83% 58%", "dark": "263 70% 50%" },
+    "chart4": { "light": "38 92% 50%", "dark": "38 92% 50%" },
+    "chart5": { "light": "340 75% 55%", "dark": "340 75% 55%" }
+  },
+  "radius": { "sm": "0.25rem", "md": "0.5rem", "lg": "0.75rem", "xl": "1rem" },
+  "font": {
+    "sans": "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+    "mono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace"
+  },
+  "shadow": {
+    "sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+    "md": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+    "lg": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"
+  },
+  "motion": {
+    "fast": "120ms",
+    "normal": "200ms",
+    "slow": "320ms",
+    "easeOut": "cubic-bezier(0.16, 1, 0.3, 1)"
+  },
+  "zIndex": { "base": "0", "dropdown": "50", "sticky": "100", "overlay": "200", "modal": "300", "toast": "400" }
+}
