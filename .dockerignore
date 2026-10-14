@@ -1,0 +1,15 @@
+# path: .dockerignore
+.git
+.github
+.husky
+node_modules
+.next
+coverage
+dist
+build
+.env
+.env.*
+!.env.example
+npm-debug.log*
+Dockerfile
+.dockerignore

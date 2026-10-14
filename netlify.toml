@@ -1,0 +1,14 @@
+# path: netlify.toml
+[build]
+command = "npm run build"
+publish = ".next"
+
+[build.environment]
+NODE_VERSION = "22"
+NEXT_TELEMETRY_DISABLED = "1"
+
+[functions]
+node_bundler = "esbuild"
+
+[[plugins]]
+package = "@netlify/plugin-nextjs@5.16.2"
